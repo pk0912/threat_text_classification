@@ -66,6 +66,10 @@ def read_csv_data(path, keep_columns=[], drop_cols=[]):
         logger.error("Exception in reading csv data : {}".format(str(e)))
 
 
+def save_csv_data(dataframe, path, index=False, encoding="utf-8"):
+    dataframe.to_csv(path, index=index, encoding=encoding)
+
+
 def save_objects(obj, path):
     try:
         dump(obj, path)

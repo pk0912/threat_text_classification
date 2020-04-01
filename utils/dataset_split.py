@@ -7,7 +7,7 @@ import pandas as pd
 import numpy as np
 from sklearn.model_selection import StratifiedShuffleSplit
 
-from settings import RAW_DATA_DIR, ORIG_DATA_DIR, TEST_DATA_DIR, LUCKY_SEED
+from settings import LUCKY_SEED
 from .helpers import logger
 
 

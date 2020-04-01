@@ -40,7 +40,7 @@ def preprocess(data, preprocess_type="simple"):
             data["text"] = data["comment_text"].map(simple_processing)
         else:
             data["text"] = data["comment_text"].map(complex_processing)
-        data = data.drop(columns=["id", "comment_text"])
+        data = data.drop(columns=["comment_text"])
         data = data.dropna()
         data = data.drop(data.loc[data["text"] == ""].index)
         return data.reset_index(drop=True)
