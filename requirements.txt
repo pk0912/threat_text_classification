@@ -1,0 +1,16 @@
+ipdb
+joblib
+jupyter
+matplotlib
+numpy
+nltk
+pandas
+scikit-learn
+seaborn
+statsmodels
+spacy
+tensorflow
+tensorflow_hub
+tqdm
+wordcloud
+
