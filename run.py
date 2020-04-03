@@ -17,6 +17,7 @@ from config import (
     COMPLEX_PROCESSING_TYPE,
     VECTORIZE_DATA_SIMPLE,
     VECTORIZE_DATA_COMPLEX,
+    PERFORM_CLASSIFICATION,
     MAX_SEQUENCE_LENGTH,
     MAX_VOCAB_SIZE,
 )
@@ -52,6 +53,11 @@ def vectorize_data(data_path, processing_type):
         )
     else:
         logger.error("Error in vectorizing data!!!")
+
+
+def perform_classification():
+    # TODO
+    pass
 
 
 def main():
@@ -98,6 +104,8 @@ def main():
                 os.path.join(COMPLEX_PROCESSED_DATA_DIR, "train_data_complex.csv"),
                 "complex",
             )
+        if PERFORM_CLASSIFICATION:
+            perform_classification()
     except Exception as e:
         logger.error("Exception in main method : {}".format(str(e)))
         return

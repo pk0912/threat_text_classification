@@ -77,3 +77,8 @@ def save_objects(obj, path):
         logger.error("ERROR IN SAVING OBJECT : {}".format(str(e)))
         return False
     return True
+
+
+def save_model_summary(model, file_path):
+    with open(file_path, "w") as f:
+        model.summary(print_fn=lambda x: f.write(x + "\n"))

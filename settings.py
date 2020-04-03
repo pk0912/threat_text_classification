@@ -7,6 +7,7 @@ VAL_FILE_COUNT = 12
 ROOT_DIR = os.path.abspath(os.path.dirname(__file__))
 
 OBJECTS_DIR = os.path.join(ROOT_DIR, "objects")
+OUTPUTS_DIR = os.path.join(ROOT_DIR, "outputs")
 LOGS_DIR = os.path.join(ROOT_DIR, "logs")
 DATA_DIR = os.path.join(ROOT_DIR, "data")
 
