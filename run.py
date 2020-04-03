@@ -6,7 +6,8 @@ import os
 import pandas as pd
 from joblib import dump
 
-from utils.helpers import logger
+from utils.helpers import logger, save_csv_data
+from utils.dataset_split import stratified_split
 from raw_data_ingest import get_data
 from preprocessing import preprocess
 from vectorizer import vectorize
@@ -25,10 +26,11 @@ from settings import (
     COMPLEX_PROCESSED_DATA_DIR,
     OBJECTS_DIR,
     TRAIN_DATA_DIR_WI,
+    VAL_DATA_DIR_WI,
 )
 
 
-def vectorize_data(data_path, save_path):
+def vectorize_data(data_path, processing_type):
     data = pd.read_csv(data_path, encoding="utf-8")
     tokenizer, vectors = vectorize(
         MAX_VOCAB_SIZE, MAX_SEQUENCE_LENGTH, data["text"].values
@@ -37,7 +39,17 @@ def vectorize_data(data_path, save_path):
         dump(tokenizer, os.path.join(OBJECTS_DIR, "tokenizer.joblib"))
         vec_df = pd.DataFrame(vectors)
         vec_df = pd.concat([vec_df, data.drop(columns=["text"])], axis=1)
-        vec_df.to_csv(save_path, index=False, encoding="utf-8")
+        train_vec_data, val_vec_data = stratified_split(vec_df, split_col="threat")
+        save_csv_data(
+            train_vec_data,
+            os.path.join(
+                TRAIN_DATA_DIR_WI, "train_vectors_{}.csv".format(processing_type)
+            ),
+        )
+        save_csv_data(
+            val_vec_data,
+            os.path.join(VAL_DATA_DIR_WI, "val_vectors_{}.csv".format(processing_type)),
+        )
     else:
         logger.error("Error in vectorizing data!!!")
 
@@ -79,12 +91,12 @@ def main():
         if VECTORIZE_DATA_SIMPLE:
             vectorize_data(
                 os.path.join(SIMPLE_PROCESSED_DATA_DIR, "train_data_simple.csv"),
-                os.path.join(TRAIN_DATA_DIR_WI, "vectors_simple.csv"),
+                "simple",
             )
         if VECTORIZE_DATA_COMPLEX:
             vectorize_data(
                 os.path.join(COMPLEX_PROCESSED_DATA_DIR, "train_data_complex.csv"),
-                os.path.join(TRAIN_DATA_DIR_WI, "vectors_complex.csv"),
+                "complex",
             )
     except Exception as e:
         logger.error("Exception in main method : {}".format(str(e)))
