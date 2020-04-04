@@ -143,18 +143,22 @@ def main():
             else:
                 logger.error("Unable to write complex processed data!!!")
         if VECTORIZE_DATA_SIMPLE:
+            logger.info("Vectorizing simple processed data.")
             vectorize_data(
                 os.path.join(SIMPLE_PROCESSED_DATA_DIR, "train_data_simple.csv"),
                 "simple",
             )
         if VECTORIZE_DATA_COMPLEX:
+            logger.info("Vectorizing complex processed data.")
             vectorize_data(
                 os.path.join(COMPLEX_PROCESSED_DATA_DIR, "train_data_complex.csv"),
                 "complex",
             )
         if SIMPLE_DATA_CLASSIFICATION:
+            logger.info("Performing classification using simple processed data.")
             perform_classification("simple")
         if COMPLEX_DATA_CLASSIFICATION:
+            logger.info("Performing classification using complex processed data.")
             perform_classification("complex")
     except Exception as e:
         logger.error("Exception in main method : {}".format(str(e)))
