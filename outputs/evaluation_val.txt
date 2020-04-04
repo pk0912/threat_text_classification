@@ -1,0 +1,21 @@
+Shape of predicted values : (160, 1)
+Shape of target values : (160, 1)
+True neg : 69
+False pos : 11
+False neg : 3
+True pos : 77
+ROC : 0.9125
+Precision : 0.875
+Accuracy : 0.9125
+Recall : 0.9625
+F1 : 0.9166666666666667
+Classification report : 
+              precision    recall  f1-score   support
+
+           0       0.96      0.86      0.91        80
+           1       0.88      0.96      0.92        80
+
+    accuracy                           0.91       160
+   macro avg       0.92      0.91      0.91       160
+weighted avg       0.92      0.91      0.91       160
+
