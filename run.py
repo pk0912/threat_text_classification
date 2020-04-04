@@ -49,7 +49,9 @@ from settings import (
 
 def get_config():
     config_dict = dict()
-    config_dict["glove_path"] = GLOVE_PATH
+    config_dict["glove_path"] = os.path.join(
+        GLOVE_PATH, "glove.6B.{}d.txt".format(EMBEDDING_DIM)
+    )
     config_dict["vocab_size"] = MAX_VOCAB_SIZE
     config_dict["seq_len"] = MAX_SEQUENCE_LENGTH
     config_dict["embed_dim"] = EMBEDDING_DIM
@@ -88,6 +90,8 @@ def vectorize_data(data_path, processing_type):
         )
     else:
         logger.error("Error in vectorizing data!!!")
+        return False
+    return True
 
 
 def perform_classification(data_type="complex"):
@@ -106,6 +110,8 @@ def perform_classification(data_type="complex"):
     clf_status = classifier(X, y, (val_X, val_y), tokenizer, configs)
     if not clf_status:
         logger.error("Error in performing classification!!!")
+        return False
+    return True
 
 
 def main():
@@ -144,22 +150,38 @@ def main():
                 logger.error("Unable to write complex processed data!!!")
         if VECTORIZE_DATA_SIMPLE:
             logger.info("Vectorizing simple processed data.")
-            vectorize_data(
+            if not vectorize_data(
                 os.path.join(SIMPLE_PROCESSED_DATA_DIR, "train_data_simple.csv"),
                 "simple",
-            )
+            ):
+                logger.error(
+                    "Execution abruptly stopped while vectorizing simple data!!!"
+                )
+                return
         if VECTORIZE_DATA_COMPLEX:
             logger.info("Vectorizing complex processed data.")
-            vectorize_data(
+            if vectorize_data(
                 os.path.join(COMPLEX_PROCESSED_DATA_DIR, "train_data_complex.csv"),
                 "complex",
-            )
+            ):
+                logger.error(
+                    "Execution abruptly stopped while vectorizing complex data!!!"
+                )
+                return
         if SIMPLE_DATA_CLASSIFICATION:
             logger.info("Performing classification using simple processed data.")
-            perform_classification("simple")
+            if not perform_classification("simple"):
+                logger.error(
+                    "Execution abruptly stopped while performing simple data classification!!!"
+                )
+                return
         if COMPLEX_DATA_CLASSIFICATION:
             logger.info("Performing classification using complex processed data.")
-            perform_classification("complex")
+            if not perform_classification("complex"):
+                logger.error(
+                    "Execution abruptly stopped while performing complex data classification!!!"
+                )
+                return
     except Exception as e:
         logger.error("Exception in main method : {}".format(str(e)))
         return
