@@ -7,6 +7,7 @@ import numpy as np
 import pandas as pd
 from joblib import dump, load
 from tensorflow.keras.optimizers import Nadam
+from sklearn.metrics import classification_report, confusion_matrix
 
 from utils.helpers import logger, save_csv_data
 from utils.dataset_split import stratified_split
@@ -14,6 +15,7 @@ from raw_data_ingest import get_data
 from preprocessing import preprocess
 from vectorizer import vectorize
 from classification import classifier
+from prediction import predict
 from config import (
     RAW_DATA_INGEST,
     SIMPLE_PROCESSING_TYPE,
@@ -34,6 +36,7 @@ from config import (
     METRICS,
     MODEL_NAME,
     MODEL_SAVE_FORMAT,
+    TEST_SET_EVALUATION,
 )
 from settings import (
     RAW_DATA_DIR,
@@ -114,6 +117,38 @@ def perform_classification(data_type="complex"):
     return True
 
 
+def evaluate_test_data():
+    try:
+        test_data = pd.read_csv(
+            os.path.join(RAW_DATA_DIR, "test_data.csv"), encoding="utf-8"
+        )
+        sentences = list(test_data["comment_text"].values)
+        y = test_data[CLASSES].values
+        _, y_pred = predict(sentences)
+        with open(os.path.join(OUTPUTS_DIR, "evaluation_test.txt"), "w") as f:
+            f.write("Shape of predicted values : {}".format(y_pred.shape))
+            f.write("\n")
+            f.write("Shape of target values : {}".format(y.shape))
+            f.write("\n")
+            tn, fp, fn, tp = confusion_matrix(y, y_pred).ravel()
+            f.write("True neg : {}".format(tn))
+            f.write("\n")
+            f.write("False pos : {}".format(fp))
+            f.write("\n")
+            f.write("False neg : {}".format(fn))
+            f.write("\n")
+            f.write("True pos : {}".format(tp))
+            f.write("\n")
+            f.write("Classification report : ")
+            f.write("\n")
+            f.write(classification_report(y, y_pred))
+            f.write("\n")
+        return True
+    except Exception as e:
+        logger.log("Exception in evaluating test data : {}".format(str(e)))
+        return False
+
+
 def main():
     logger.info("Execution Started!!!")
     if RAW_DATA_INGEST:
@@ -181,6 +216,11 @@ def main():
                 logger.error(
                     "Execution abruptly stopped while performing complex data classification!!!"
                 )
+                return
+        if TEST_SET_EVALUATION:
+            logger.info("Evaluating test data.")
+            if not evaluate_test_data():
+                logger.error("Execution abruptly stopped while evaluating test data!!!")
                 return
     except Exception as e:
         logger.error("Exception in main method : {}".format(str(e)))

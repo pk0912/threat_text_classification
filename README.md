@@ -36,6 +36,21 @@ Classification report :
 weighted avg       0.92      0.91      0.91       160
 ```
 
+#### PERFORMANCE OVER TEST DATA
+```
+WITH A CLASSIFICATION THRESHOLD OF 0.7
+
+Classification report :
+              precision    recall  f1-score   support
+
+           0       0.92      0.97      0.94        78
+           1       0.97      0.91      0.94        78
+
+    accuracy                           0.94       156
+   macro avg       0.94      0.94      0.94       156
+weighted avg       0.94      0.94      0.94       156
+```
+
 #### LOSS CHART
 ![Loss chart image](/outputs/loss_chart.png)
 

@@ -1,0 +1,16 @@
+Shape of predicted values : (156, 1)
+Shape of target values : (156, 1)
+True neg : 76
+False pos : 2
+False neg : 7
+True pos : 71
+Classification report :
+              precision    recall  f1-score   support
+
+           0       0.92      0.97      0.94        78
+           1       0.97      0.91      0.94        78
+
+    accuracy                           0.94       156
+   macro avg       0.94      0.94      0.94       156
+weighted avg       0.94      0.94      0.94       156
+
