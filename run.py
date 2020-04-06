@@ -172,6 +172,7 @@ def main():
                 )
             else:
                 logger.error("Unable to write simple processed data!!!")
+                return
         if COMPLEX_PROCESSING_TYPE:
             logger.info("Performing complex text processing.")
             train_data_complex = preprocess(train_data, preprocess_type="complex")
@@ -183,6 +184,7 @@ def main():
                 )
             else:
                 logger.error("Unable to write complex processed data!!!")
+                return
         if VECTORIZE_DATA_SIMPLE:
             logger.info("Vectorizing simple processed data.")
             if not vectorize_data(
@@ -195,7 +197,7 @@ def main():
                 return
         if VECTORIZE_DATA_COMPLEX:
             logger.info("Vectorizing complex processed data.")
-            if vectorize_data(
+            if not vectorize_data(
                 os.path.join(COMPLEX_PROCESSED_DATA_DIR, "train_data_complex.csv"),
                 "complex",
             ):
